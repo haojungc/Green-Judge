@@ -1,5 +1,5 @@
 /* b027: 小綠人的城堡 */
-/* http://www.tcgs.tc.edu.tw:1218/ShowProblem?problemid=b027 */
+/* url: http://www.tcgs.tc.edu.tw:1218/ShowProblem?problemid=b027 */
 
 #include <stdio.h>
 

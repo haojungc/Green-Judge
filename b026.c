@@ -1,3 +1,6 @@
+/* b026: 股海浮沈 */
+/* url: http://www.tcgs.tc.edu.tw:1218/ShowProblem?problemid=b026 */
+
 #include <stdio.h>
 
 #define MAX_LENGTH 110

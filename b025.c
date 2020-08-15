@@ -1,3 +1,6 @@
+/* b025: 棋盤格城市 */
+/* url: http://www.tcgs.tc.edu.tw:1218/ShowProblem?problemid=b025 */
+
 #include <stdio.h>
 
 long long int count[40][40];

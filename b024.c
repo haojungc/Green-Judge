@@ -1,3 +1,6 @@
+/* b024: 指南宮的階梯 */
+/* url: http://www.tcgs.tc.edu.tw:1218/ShowProblem?problemid=b024 */
+
 #include <stdio.h>
 
 long long int k[100];
