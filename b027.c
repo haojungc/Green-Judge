@@ -1,50 +1,63 @@
+/* b027: 小綠人的城堡 */
+/* http://www.tcgs.tc.edu.tw:1218/ShowProblem?problemid=b027 */
+
 #include <stdio.h>
 
 #define MAX_LENGTH 110
 
 int land[MAX_LENGTH][MAX_LENGTH];
+int dp[MAX_LENGTH][MAX_LENGTH];
+
+int min(int a, int b, int c) {
+    int min = a;
+
+    min = b < min ? b : min;
+    min = c < min ? c : min;
+
+    return min;
+}
+
+void initialize_dp(int h, int w) {
+    /* Initializes the first column */
+    for (int x = 0; x <= h; x++)
+        dp[x][0] = 0;
+    /* Initializes the first row */
+    for (int y = 0; y <= w; y++)
+        dp[0][y] = 0;
+}
 
 void input_land(int h, int w) {
-    for (int x = 0; x < h; x++)
-        for (int y = 0; y < w; y++)
+    for (int x = 1; x <= h; x++)
+        for (int y = 1; y <= w; y++)
             scanf("%d", &land[x][y]);
 }
 
-int get_max_edge(int x_start, int y_start, int h, int w) {
-    int edge  = 1;
-    int x_end = x_start + edge, y_end = y_start + edge;
+void invert_land(int h, int w) {
+    /* 0 -> 1; 1 -> 0 */
+    for (int x = 1; x <= h; x++)
+        for (int y = 1; y <= w; y++)
+            land[x][y] = land[x][y] == 0 ? 1 : 0;
+}
 
-    while (x_end < h && y_end < w) {
-        int blocked = 0;
-        for (int x = x_start; x <= x_end; x++)
-            if (land[x][y_end] == 1)
-                blocked = 1;
-        for (int y = y_start; y <= y_end; y++)
-            if (land[x_end][y] == 1)
-                blocked = 1;
+int get_max_edge(int w, int h) {
+    int max_edge = 0;
 
-        if (blocked == 1)
-            break;
+    for (int x = 1; x <= h; x++)
+        for (int y = 1; y <= w; y++)
+            max_edge = dp[x][y] > max_edge ? dp[x][y] : max_edge;
 
-        edge++;
-        x_end++;
-        y_end++;
-    }
-
-    return edge;
+    return max_edge;
 }
 
 int get_max_area(int h, int w) {
-    int max_edge = 0;
+    /* Dynamic programming */
+    for (int x = 1; x <= h; x++)
+        for (int y = 1; y <= w; y++)
+            if (land[x][y] == 1)
+                dp[x][y] =
+                    1 + min(dp[x][y - 1], dp[x - 1][y], dp[x - 1][y - 1]);
 
-    for (int x = 0; x < h; x++) {
-        for (int y = 0; y < w; y++) {
-            if (land[x][y] == 0) {
-                int edge = get_max_edge(x, y, h, w);
-                max_edge = edge > max_edge ? edge : max_edge;
-            }
-        }
-    }
+    int max_edge = get_max_edge(h, w);
 
     return max_edge * max_edge;
 }
@@ -54,7 +67,9 @@ int main() {
 
     scanf("%d %d", &h, &w);
 
+    initialize_dp(h, w);
     input_land(h, w);
+    invert_land(h, w); /* 0 -> 1; 1 -> 0 */
 
     max_area = get_max_area(h, w);
 
