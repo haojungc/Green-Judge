@@ -1,41 +1,44 @@
-/* b029: 福袋!福袋! */
-/* problem: http://www.tcgs.tc.edu.tw:1218/ShowProblem?problemid=b029 */
-/* reference: https://www.geeksforgeeks.org/coin-change-dp-7/ */
+/*  b029: 福袋!福袋!
+ *  url: http://www.tcgs.tc.edu.tw:1218/ShowProblem?problemid=b029 */
+
+/*  References:
+ *  1. Understanding The Coin Change Problem With Dynamic Programming:
+ *     https://www.geeksforgeeks.org/understanding-the-coin-change-problem-with-dynamic-programming/
+ *  2. Coin Change | DP-7:
+ *     https://www.geeksforgeeks.org/coin-change-dp-7/ */
 
 #include <stdio.h>
 
 #define MAX_LENGTH 1010
 
-int get_the_number_of_combinations(int unit[], int length, int max_price) {
-    int table[MAX_LENGTH][length];
+int get_the_number_of_ways(int max_price) {
+    int coin[]           = {2, 5, 10, 20, 25};
+    int length           = sizeof(coin) / sizeof(coin[0]);
+    int ways[MAX_LENGTH] = {0};
 
-    /* Fills the entries for 0 value case (max_price = 0) */
-    for (int i = 0; i < length; i++)
-        table[0][i] = 1;
+    ways[0] = 1;
 
-    /* Fills the rest of the table entries */
-    for (int price = 1; price <= max_price; price++) {
-        for (int i = 0; i < length; i++) {
-            int with, without;
-
-            with    = (price - unit[i] >= 0) ? table[price - unit[i]][i] : 0;
-            without = (i >= 1) ? table[price][i - 1] : 0;
-
-            table[price][i] = with + without;
+    /*  1st iteration: Calculates the total number of ways which includes coin[0]
+     *  2nd iteration: Adds the total number of ways which includes coin[1]
+     *  3rd iteration: Adds the total number of ways which includes coin[2]
+     *  4th iteration: Adds the total number of ways which includes coin[3]
+     *  and so on... */
+    for (int i = 0; i < length; i++) {
+        for (int price = 1; price <= max_price; price++) {
+            if (price - coin[i] >= 0)
+                ways[price] += ways[price - coin[i]];
         }
     }
 
-    return table[max_price][length - 1];
+    return ways[max_price];
 }
 
 int main() {
     int price, ans;
-    int unit[] = {2, 5, 10, 20, 25};
-    int length = sizeof(unit) / sizeof(unit[0]);
 
     scanf("%d", &price);
 
-    ans = get_the_number_of_combinations(unit, length, price);
+    ans = get_the_number_of_ways(price);
 
     printf("%d\n", ans);
 
