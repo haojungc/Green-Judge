@@ -39,7 +39,7 @@ int main() {
 }
 
 void build_max_satisfaction(int total_videos, int max_length) {
-    /* Adds a new video each time and updates satisfaction array */
+    /* Adds a new video each time and updates satisfaction[] */
     for (int i = 0; i < total_videos; i++) {
         update_satisfaction(video[i].length, video[i].satisfaction, max_length);
 
@@ -57,6 +57,7 @@ void build_max_satisfaction(int total_videos, int max_length) {
 }
 
 void update_satisfaction(int video_length, int video_satisfaction, int max_length) {
+    /* Updates satisfaction[] in reverse order */
     for (int i = max_length; i >= video_length; i--) {
         int total_satisfaction = satisfaction[i - video_length] + video_satisfaction;
 
